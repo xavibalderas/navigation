@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "ajv": "^5.5.2",
+    "express": "^4.16.4",
     "mapwize": "^3.1.8",
+    "serve-static": "^1.13.2",
     "vue": "^2.5.21",
     "vue-tabs-component": "^1.5.0",
     "vuex": "^3.0.1"
