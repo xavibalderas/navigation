@@ -52,6 +52,12 @@ export default {
       console.log("hola");
     },
     selectPlace: function(place){
+    this.$ga.event({
+        eventCategory: 'search',
+        eventAction: 'Place selected',
+        eventLabel: 'place',
+        eventValue: 123
+      })
       this.$store.commit({
         type: 'changePlace',
         place: place
