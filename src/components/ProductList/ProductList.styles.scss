@@ -1,0 +1,14 @@
+.letter_selector{
+  float: left;
+}
+.letter_selector ul{
+  padding-left: 0;
+  padding-right: 1em;
+}
+.letter_selector ul a.active{
+  font-weight: bold;
+}
+
+.products{
+  float: left;
+}

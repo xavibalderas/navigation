@@ -2,4 +2,47 @@ body{
   font-family: "Verdana";
   color: black;
   margin: 0;
+  font-size: 42px;
+}
+
+ul{
+  list-style: none;
+}
+.content{
+  padding: 50px 100px;
+}
+.search-control{
+  background-color: white;
+  width: 100px;
+  height: 100px;
+  border-radius: 50px;
+  pointer-events: auto;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2), 0 -1px 0px rgba(0,0,0,0.02);
+}
+.search-control button{
+  width: 100px;
+  height: 100px;
+}
+.search-control .fas{
+  font-size: 50px;
+}
+.mapboxgl-ctrl-top-right{
+  margin: 50px;
+}
+#map .mapboxgl-ctrl-bottom-right .mapboxgl-ctrl {
+  margin: 0 50px 50px 0;
+    font-family: "Verdana";
+}
+#map .mwz-ctrl-floors .mwz-floor-button{
+  background-color: white;
+  width: 100px;
+  height: 100px;
+  border-radius: 50px;
+  font-size: 48px;
+}
+#map .mwz-ctrl-floors .mwz-floor-button.mwz-selectedFloor, .mwz-ctrl-floors .mwz-floor-button.mwz-selectedFloor:hover{
+  background-color: #fad23c;
+  color: white;
+  font-weight: bold;
+
 }
