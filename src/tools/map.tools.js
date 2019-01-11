@@ -33,7 +33,11 @@ const MapTools = {
     mapwizeMap.setPaintProperty("mapwize_places_fill", 'fill-color', '#FFFFFF');
     mapwizeMap.setPaintProperty("mapwize_places_fill", 'fill-opacity', 0);
     mapwizeMap.setPaintProperty("mapwize_directions_dash", 'line-color', '#FAD23C');
+    mapwizeMap.setPaintProperty("mapwize_directions_dash", 'line-width', 20);
+    //mapwizeMap.setPaintProperty("mapwize_directions_dash", 'line-cap', 'square');
+    mapwizeMap.setPaintProperty("mapwize_directions", 'line-width', 0);
     console.log(mapwizeMap.getLayer('mapwize_places_symbol'));
+    console.log(mapwizeMap);
     store.subscribe((mutation, state) => {
       if (mutation.type === "changePlace"){
         this.showDirections();
