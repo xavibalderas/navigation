@@ -5,3 +5,4 @@ app = express();
 app.use(serveStatic(path.join(__dirname, 'dist')));
 const port = process.env.PORT || 8890;
 app.listen(port);
+app.get('/en', (req, res) => res.sendFile('index.html'));
