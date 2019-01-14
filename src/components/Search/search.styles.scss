@@ -21,13 +21,13 @@
   justify-content: flex-start;
   margin-bottom: -1px;
   padding-left: 0;
+  margin-top: 0;
 }
 
 .tabs-component-tab {
   font-size: 64px;
-  margin-right: 0;
   list-style: none;
-  margin-right: .5em;
+  margin-right: 1em;
   transform: translateY(2px);
   transition: transform .3s ease;
 }
@@ -61,12 +61,12 @@
   align-items: center;
   color: inherit;
   display: flex;
-  padding: .75em 1em 0em 0em;
+  padding: .75em 0em 0em 0em;
   text-decoration: none;
 }
 
 
   .tabs-component-panels {
     background-color: #fff;
-    padding: 1em 0em;
+    
   }

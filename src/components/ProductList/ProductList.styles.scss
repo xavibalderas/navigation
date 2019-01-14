@@ -5,8 +5,13 @@
   padding-left: 0;
   padding-right: 1em;
 }
+.letter_selector ul a{
+  padding: 10px;
+  display: block;
+}
 .letter_selector ul a.active{
   font-weight: bold;
+  background-color: #fad23c;
 }
 
 .products{
