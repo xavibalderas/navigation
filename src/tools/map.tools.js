@@ -7,6 +7,8 @@ const placeTypesDepartments = [
  ]
 
 const MapTools = {
+  _selectedPlace: undefined,
+
   init: function(mapwizeMap){
     this.map = mapwizeMap;
     mapwizeMap.setFloor(1);
@@ -16,7 +18,6 @@ const MapTools = {
       floor: 1,
       accuracy: 8
     });
-
 
     mapwizeMap.setLayoutProperty('mapwize_places_symbol','text-size',33);
     mapwizeMap.setLayoutProperty('mapwize_places_symbol','icon-size',0.4);
@@ -29,13 +30,14 @@ const MapTools = {
 
     mapwizeMap.setPaintProperty('mapwize_places_symbol','text-color','#FFFFFF');
     mapwizeMap.setPaintProperty('mapwize_places_symbol','text-halo-width',0);
-    mapwizeMap.setPaintProperty("mapwize_places_fill", 'fill-color', '#FFFFFF');
-    mapwizeMap.setPaintProperty("mapwize_places_fill", 'fill-opacity', 0);
+    //mapwizeMap.setPaintProperty("mapwize_places_fill", 'fill-color', '#FFFFFF');
+    //mapwizeMap.setPaintProperty("mapwize_places_fill", 'fill-opacity', 0);
     mapwizeMap.setPaintProperty("mapwize_directions_dash", 'line-color', '#FAD23C');
     mapwizeMap.setPaintProperty("mapwize_directions_dash", 'line-width', 20);
     mapwizeMap.setLayoutProperty('mapwize_directions_dash', 'line-cap', 'square');
     mapwizeMap.setPaintProperty("mapwize_directions", 'line-width', 0);
     mapwizeMap.setPaintProperty("mapwize_directions_dash", 'line-dasharray',[1,0]);
+
     console.log(mapwizeMap.getLayer('mapwize_directions_dash'));
     console.log(mapwizeMap);
     console.log(mapwizeMap.getSource("mapwize_directions"));
@@ -50,6 +52,28 @@ const MapTools = {
            //mapwizeMap.setPaintProperty("mapwize_directions_dash", 'line-width', Math.round(mapwizeMap.getZoom()));
 
          });
+
+    mapwizeMap.on('mapwize:click', e => {
+        if (e.place !== null){
+          mapwizeMap.setPlaceStyle(e.place, {
+            fillColor: '#000000',
+            fillOpacity: 0.2
+          });
+          if (this._selectedPlace!== undefined){
+              mapwizeMap.setPlaceStyle(this._selectedPlace._id, {fillOpacity:0});
+          }
+          this._selectedPlace = e.place;
+
+
+        console.log(e);
+
+        //  showPlace(e.place);
+        //  app.navigateDisabled = false;
+
+        }
+         // app.name = e.place.name;
+         // app.articles = e.place.data ? e.place.data.articles : [];
+    })
 
   },
   showDirections: function(){
@@ -107,6 +131,7 @@ const MapTools = {
   },
 
   addControls: function (){
+
     class SearchControl {
       onAdd(map){
         this.map = map;
@@ -187,10 +212,13 @@ const MapTools = {
               const isDepartment = placeTypesDepartments.indexOf(element.placeTypeId);
               if (isDepartment !== -1){
                 departments[floor].push(element);
+                this.map.setPlaceStyle(element._id,{fillOpacity:0});
+
               }else{
                 facilities[floor].push(element);
               }
             })
+            this._departments = Object.assign({}, departments);
             var products = [];
             var letters = [];
             places.forEach((element)=>{
