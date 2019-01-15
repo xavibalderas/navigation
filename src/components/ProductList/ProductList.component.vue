@@ -32,13 +32,15 @@ export default {
   }, //computed
   methods: {
     selectProduct: function (product){
-    console.log(product.placeId);
+    const place = this.$store.state.places.filter(_p => _p._id === product.placeId);
+    
       this.$store.commit(
         {
           type: 'changePlace',
-          placeId: product.placeId,
+          place: place[0]
         }
       );
+      this.$store.commit('toggleSearch');
     },
 
     selectLetter: function (letter){

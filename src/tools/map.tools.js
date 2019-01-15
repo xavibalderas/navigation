@@ -38,9 +38,6 @@ const MapTools = {
     mapwizeMap.setPaintProperty("mapwize_directions", 'line-width', 0);
     mapwizeMap.setPaintProperty("mapwize_directions_dash", 'line-dasharray',[1,0]);
 
-    console.log(mapwizeMap.getLayer('mapwize_directions_dash'));
-    console.log(mapwizeMap);
-    console.log(mapwizeMap.getSource("mapwize_directions"));
     store.subscribe((mutation, state) => {
       if (mutation.type === "changePlace"){
         this.showDirections();
@@ -64,8 +61,6 @@ const MapTools = {
           }
           this._selectedPlace = e.place;
 
-
-        console.log(e);
 
         //  showPlace(e.place);
         //  app.navigateDisabled = false;
@@ -94,7 +89,7 @@ const MapTools = {
           this.map.setDirection(direction);
           //this.map.getSource("mapwize_directions").setData(direction.route[0].path);
           this.map.setBearing(48.1);
-          console.log(direction);
+          
         });
   },
 
@@ -281,7 +276,7 @@ const MapTools = {
             letters.sort();
             store.commit({
               type: 'assignPlaces',
-              places: allPlaces,
+              places: places, //allPlaces,
               departments: departments,
               products: products,
               letters: letters,
