@@ -26,6 +26,9 @@ const MapTools = {
     mapwizeMap.setLayoutProperty('mapwize_places_symbol','text-optional',false);
     mapwizeMap.setLayoutProperty('mapwize_places_symbol','text-anchor','center');
     mapwizeMap.setLayoutProperty('mapwize_places_symbol','text-anchor','top');
+    mapwizeMap.setLayoutProperty('mapwize_places_symbol','icon-size',1);
+
+
     //mapwizeMap.setLayoutProperty('mapwize_places_symbol', 'visibility', 'none');
 
     mapwizeMap.setPaintProperty('mapwize_places_symbol','text-color','#FFFFFF');
@@ -37,6 +40,14 @@ const MapTools = {
     mapwizeMap.setLayoutProperty('mapwize_directions_dash', 'line-cap', 'square');
     mapwizeMap.setPaintProperty("mapwize_directions", 'line-width', 0);
     mapwizeMap.setPaintProperty("mapwize_directions_dash", 'line-dasharray',[1,0]);
+    mapwizeMap.setMinZoom(20);
+    const _layers = mapwizeMap.getStyle().layers;
+    console.log(_layers);
+    _layers.forEach((_l)=>{
+      if (!_l.id.includes('mapwize') && _l.id!=='background'){
+        mapwizeMap.setLayoutProperty(_l.id, 'visibility', 'none');
+      }
+    })
 
     store.subscribe((mutation, state) => {
       if (mutation.type === "changePlace"){
@@ -89,7 +100,7 @@ const MapTools = {
           this.map.setDirection(direction);
           //this.map.getSource("mapwize_directions").setData(direction.route[0].path);
           this.map.setBearing(48.1);
-          
+
         });
   },
 
