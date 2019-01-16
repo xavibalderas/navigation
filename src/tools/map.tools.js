@@ -20,12 +20,12 @@ const MapTools = {
     });
 
     mapwizeMap.setLayoutProperty('mapwize_places_symbol','text-size',33);
-    mapwizeMap.setLayoutProperty('mapwize_places_symbol','icon-size',0.4);
+    //mapwizeMap.setLayoutProperty('mapwize_places_symbol','icon-size',0.4);
     mapwizeMap.setLayoutProperty('position','icon-size',2);
-    mapwizeMap.setLayoutProperty('mapwize_places_symbol','text-offset',[0,0.4]);
-    mapwizeMap.setLayoutProperty('mapwize_places_symbol','text-optional',false);
-    mapwizeMap.setLayoutProperty('mapwize_places_symbol','text-anchor','center');
-    mapwizeMap.setLayoutProperty('mapwize_places_symbol','text-anchor','top');
+//    mapwizeMap.setLayoutProperty('mapwize_places_symbol','text-offset',[0,0.4]);
+//    mapwizeMap.setLayoutProperty('mapwize_places_symbol','text-optional',false);
+//    mapwizeMap.setLayoutProperty('mapwize_places_symbol','text-anchor','center');
+//    mapwizeMap.setLayoutProperty('mapwize_places_symbol','text-anchor','top');
     mapwizeMap.setLayoutProperty('mapwize_places_symbol','icon-size',1);
 
 
