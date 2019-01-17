@@ -11,6 +11,7 @@ export default new Vuex.Store({
       {floor: 1, name: 'EG'}
     ],
     places: [],
+    placeLists: [],
     departments: [],
     facilities: [],
     products: [],
@@ -33,6 +34,9 @@ export default new Vuex.Store({
     assignMap (state, payload){
       state.map = payload.map;
     },
+    assignPlaceLists (state, payload){
+      state.placeLists = payload.placeLists;
+    },
     changeLetter (state, payload){
       state.selectedLetter = payload.letter;
     },
@@ -41,6 +45,9 @@ export default new Vuex.Store({
     },
     toggleSearch (state){
       state.showSearch = !state.showSearch;
+    },
+    assignFacilities (state, payload) {
+      state.facilities = payload.facilities;
     }
   },
   actions: {

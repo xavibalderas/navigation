@@ -4,25 +4,25 @@
   <CloseButton v-on:close-window="closeSearch"/>
     <tabs>
       <tab name="Räume">
-          <template v-for="(value, propertyName) in this.departments">
-          <h3>Hhhds</h3>
-            <ul>
-              <template v-for="(v, p) in value">
-                <li><a v-on:click="selectPlace(v)">{{v.name}}</a></li>
-                </template>
-            </ul>
-          </template>
+        <template v-for="(pL) in this.placeLists">
+        <h3>{{pL.name}}</h3>
+          <ul>
+            <template v-for="(id) in pL.placeIds">
+              <li><a <a v-on:click="selectPlace(placeById(id))">{{placeById(id).name}}</a></li>
+              </template>
+          </ul>
+        </template>
       </tab>
       <tab name="Produkte">
         <ProductList />
       </tab>
       <tab name="Facilities">
-        <template v-for="(value, propertyName) in this.facilities">
-        <h3>Hhhds</h3>
+        <template v-for="(fL) in this.facilities">
+        <h3>{{fL.name}}</h3>
           <ul>
-            <template v-for="(v, p) in value">
-              <li><a v-on:click="selectPlace(v)">{{v.name}}</a></li>
-              </template>2
+            <template v-for="(id) in fL.placeIds">
+              <li><a v-on:click="selectPlace(placeById(id))">{{placeById(id).name}}</a></li>
+              </template>
           </ul>
         </template>
       </tab>
@@ -45,9 +45,12 @@ export default {
     ProductList
   }, //components
   computed: mapState([
-  'departments', 'facilities'
-  ]), //computed
+      'departments', 'facilities', 'placeLists', 'places'
+    ]), //computed
   methods:{
+    placeById(_id){
+        return this.places.find(pl => pl._id===_id);
+    },
     closeSearch: function(event){
       console.log("hola");
     },

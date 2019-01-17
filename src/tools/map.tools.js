@@ -24,11 +24,11 @@ const MapTools = {
 
     //mapwizeMap.setLayoutProperty('mapwize_places_symbol','icon-size',0.4);
 
-    mapwizeMap.setLayoutProperty('mapwize_places_symbol','text-offset',[0,0.4]);
+    //mapwizeMap.setLayoutProperty('mapwize_places_symbol','text-offset',[0,0.4]);
     mapwizeMap.setLayoutProperty('mapwize_places_symbol','text-optional',false);
-    mapwizeMap.setLayoutProperty('mapwize_places_symbol','text-anchor','center');
-    mapwizeMap.setLayoutProperty('mapwize_places_symbol','text-anchor','top');
-    mapwizeMap.setLayoutProperty('mapwize_places_symbol','icon-size',1);
+    //mapwizeMap.setLayoutProperty('mapwize_places_symbol','text-anchor','center');
+    //mapwizeMap.setLayoutProperty('mapwize_places_symbol','text-anchor','top');
+    mapwizeMap.setLayoutProperty('mapwize_places_symbol','icon-size',1.5);
 
 
     //mapwizeMap.setLayoutProperty('mapwize_places_symbol', 'visibility', 'none');
@@ -42,6 +42,7 @@ const MapTools = {
     mapwizeMap.setLayoutProperty('mapwize_directions_dash', 'line-cap', 'square');
     mapwizeMap.setPaintProperty("mapwize_directions", 'line-width', 0);
     mapwizeMap.setPaintProperty("mapwize_directions_dash", 'line-dasharray',[1,0]);
+    mapwizeMap.setPaintProperty("background", 'background-color','#ABABAB');
     mapwizeMap.setMinZoom(20);
     const _layers = mapwizeMap.getStyle().layers;
     console.log(_layers);
@@ -54,6 +55,11 @@ const MapTools = {
     store.subscribe((mutation, state) => {
       if (mutation.type === "changePlace"){
         this.showDirections();
+      }
+    });
+    store.subscribe((mutation, state) => {
+      if (mutation.type === "assignPlaces"){
+        this.loadPlaceLists();
       }
     });
 
@@ -203,73 +209,57 @@ const MapTools = {
   getFloors: function(map){
     return map.getFloors();
   },
+
+  loadPlaceLists: function(){
+
+    Mapwize.Api.search({
+        query: 'departments',
+        venueId:  '5b8ffe23051cd90021bd526f',
+        objectClass: ['placeList']
+    }).then((results) => {
+      console.log(results);
+      store.commit({
+        type: 'assignPlaceLists',
+        placeLists: results.hits,
+      });
+    });
+
+    Mapwize.Api.search({
+        query: 'facilities',
+        venueId:  '5b8ffe23051cd90021bd526f',
+        objectClass: ['placeList']
+    }).then((results) => {
+      console.log(results);
+      store.commit({
+        type: 'assignFacilities',
+        facilities: results.hits,
+      });
+    });
+
+
+
+
+
+  },
+
   initInfo: function(map){
 
     Mapwize.Api.getPlaces({
           venueId: '5b8ffe23051cd90021bd526f'
         }).then(places => {
             var floors = store.state.floors;
-            var departments = {};
-            var facilities = {};
-            floors.sort();
-            var allPlaces = Object.assign({}, places);
-            departments = floors.map((currentValue)=>(departments[currentValue] = []));
-            facilities = floors.map((currentValue)=>(facilities[currentValue] = []));
-            places.forEach((element)=>{
-              const floor = element.floor;
-              const isDepartment = placeTypesDepartments.indexOf(element.placeTypeId);
-              if (isDepartment !== -1){
-                departments[floor].push(element);
-                this.map.setPlaceStyle(element._id,{fillOpacity:0});
-
-              }else{
-                facilities[floor].push(element);
-              }
-            })
-            this._departments = Object.assign({}, departments);
             var products = [];
             var letters = [];
             places.forEach((element)=>{
-              if (element.data !== undefined && element.data.articles!== undefined) {
-                element.data.articles.forEach((article)=> {
-                  products.push({name: article, placeId: element._id, letter: article.toUpperCase().charAt(0)});
-                  letters.push(article.toUpperCase().charAt(0));
-                });
-              }
-            });
-            departments.forEach((fl)=>{
-              fl.sort(function(a, b) {
-                  var nameA = a.name.toUpperCase(); // ignore upper and lowercase
-                  var nameB = b.name.toUpperCase(); // ignore upper and lowercase
-                  if (nameA < nameB) {
-                    return -1;
-                  }
-                  if (nameA > nameB) {
-                    return 1;
-                  }
-
-                  // names must be equal
-                  return 0;
-                });
-
+                this.map.setPlaceStyle(element._id,{fillOpacity:0});
+                if (element.data !== undefined && element.data.articles!== undefined) {
+                  element.data.articles.forEach((article)=> {
+                    products.push({name: article, placeId: element._id, letter: article.toUpperCase().charAt(0)});
+                    letters.push(article.toUpperCase().charAt(0));
+                  });
+                }
             })
 
-            facilities.forEach((fl)=>{
-              fl.sort(function(a, b) {
-                  var nameA = a.name.toUpperCase(); // ignore upper and lowercase
-                  var nameB = b.name.toUpperCase(); // ignore upper and lowercase
-                  if (nameA < nameB) {
-                    return -1;
-                  }
-                  if (nameA > nameB) {
-                    return 1;
-                  }
-
-                  // names must be equal
-                  return 0;
-                });
-
-            })
 
             products.sort(function(a, b) {
                 var nameA = a.name.toUpperCase(); // ignore upper and lowercase
@@ -287,13 +277,12 @@ const MapTools = {
 
             letters = [...new Set(letters)];
             letters.sort();
+
             store.commit({
               type: 'assignPlaces',
               places: places, //allPlaces,
-              departments: departments,
               products: products,
               letters: letters,
-              facilities: facilities
             });
 
         });
