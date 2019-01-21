@@ -18,7 +18,10 @@ export default new Vuex.Store({
     letters: [],
     selectedLetter: 'A',
     selectedPlace: {},
-    showSearch: false
+    showSearch: false,
+    marker: {},
+    previousPlace: {},
+    directionsVisible: false
   },
   mutations: {
     assignPlaces (state, payload){
@@ -41,13 +44,20 @@ export default new Vuex.Store({
       state.selectedLetter = payload.letter;
     },
     changePlace (state, payload){
-      state.selectedPlace = payload.place
+      state.previousPlace = state.selectedPlace;
+      state.selectedPlace = payload.place;
+    },
+    addMarker (state, payload){
+      state.marker = payload.marker;
     },
     toggleSearch (state){
       state.showSearch = !state.showSearch;
     },
     assignFacilities (state, payload) {
       state.facilities = payload.facilities;
+    },
+    toggleDirections (state, payload) {
+      state.directionsVisible = payload.visible;
     }
   },
   actions: {

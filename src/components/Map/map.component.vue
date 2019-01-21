@@ -23,9 +23,16 @@ export default {
   mounted: function () {
 
         Mapwize.apiKey('3d2dafbf53a14c95cee47c2348f9c5c3');
-        const mapwizeMap = new Mapwize.Map(MapTools.initConfig, MapTools.mapConfig);
+        const mapwizeMap = new Mapwize.Map({
+        bearing:48.1,
+        ...MapTools.initConfig}, MapTools.mapConfig);
         mapwizeMap.on('mapwize:ready', () => {
-            MapTools.init(mapwizeMap);
+            MapTools.init(mapwizeMap, {
+              latitude: 47.42209953906886,
+              longitude: 8.375177110719962,
+              floor: 1,
+              bearing: 48.1
+            });
             MapTools.initInfo(mapwizeMap);
             MapTools.addControls();
         });

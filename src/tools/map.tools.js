@@ -7,91 +7,170 @@ const placeTypesDepartments = [
  ]
 
 const MapTools = {
+
+  _highLightStyle: {
+      fillColor: '#000000',
+      fillOpacity: 0.2
+  },
+
   _selectedPlace: undefined,
 
-  init: function(mapwizeMap){
-    this.map = mapwizeMap;
-    mapwizeMap.setFloor(1);
-    mapwizeMap.setUserPosition({
-      latitude: 47.42209953906886,
-      longitude: 8.375177110719962,
-      floor: 1,
-      accuracy: 8
-    });
-
-    mapwizeMap.setLayoutProperty('mapwize_places_symbol','text-size',33);
-    mapwizeMap.setLayoutProperty('position','icon-size',2);
-
-    //mapwizeMap.setLayoutProperty('mapwize_places_symbol','icon-size',0.4);
-
-    //mapwizeMap.setLayoutProperty('mapwize_places_symbol','text-offset',[0,0.4]);
-    mapwizeMap.setLayoutProperty('mapwize_places_symbol','text-optional',false);
-    //mapwizeMap.setLayoutProperty('mapwize_places_symbol','text-anchor','center');
-    //mapwizeMap.setLayoutProperty('mapwize_places_symbol','text-anchor','top');
-    mapwizeMap.setLayoutProperty('mapwize_places_symbol','icon-size',1.5);
+  _changeMapStyle : function(map){
 
 
-    //mapwizeMap.setLayoutProperty('mapwize_places_symbol', 'visibility', 'none');
-
-    mapwizeMap.setPaintProperty('mapwize_places_symbol','text-color','#FFFFFF');
-    mapwizeMap.setPaintProperty('mapwize_places_symbol','text-halo-width',0);
-    //mapwizeMap.setPaintProperty("mapwize_places_fill", 'fill-color', '#FFFFFF');
-    //mapwizeMap.setPaintProperty("mapwize_places_fill", 'fill-opacity', 0);
-    mapwizeMap.setPaintProperty("mapwize_directions_dash", 'line-color', '#FAD23C');
-    mapwizeMap.setPaintProperty("mapwize_directions_dash", 'line-width', 20);
-    mapwizeMap.setLayoutProperty('mapwize_directions_dash', 'line-cap', 'square');
-    mapwizeMap.setPaintProperty("mapwize_directions", 'line-width', 0);
-    mapwizeMap.setPaintProperty("mapwize_directions_dash", 'line-dasharray',[1,0]);
-    mapwizeMap.setPaintProperty("background", 'background-color','#ABABAB');
-    mapwizeMap.setMinZoom(20);
-    const _layers = mapwizeMap.getStyle().layers;
-    console.log(_layers);
+    //Hide all the layers that are not needed
+    const _layers = map.getStyle().layers;
     _layers.forEach((_l)=>{
-      if (!_l.id.includes('mapwize') && _l.id!=='background'){
-        mapwizeMap.setLayoutProperty(_l.id, 'visibility', 'none');
+      if (!_l.id.includes('mapwize') && _l.id!=='background' && _l.id!=='position'){
+        map.setLayoutProperty(_l.id, 'visibility', 'none');
       }
     })
 
-    store.subscribe((mutation, state) => {
-      if (mutation.type === "changePlace"){
-        this.showDirections();
-      }
-    });
-    store.subscribe((mutation, state) => {
-      if (mutation.type === "assignPlaces"){
-        this.loadPlaceLists();
-      }
-    });
+    //map.setLayoutProperty('mapwize_places_symbol','icon-size',0.4);
+    //map.setLayoutProperty('mapwize_places_symbol','text-offset',[0,0.4]);
+    //map.setLayoutProperty('mapwize_places_symbol','text-anchor','center');
+    //map.setLayoutProperty('mapwize_places_symbol','text-anchor','top');
+    //map.setLayoutProperty('mapwize_places_symbol', 'visibility', 'none');
+    //map.setPaintProperty("mapwize_places_fill", 'fill-color', '#FFFFFF');
+    //map.setPaintProperty("mapwize_places_fill", 'fill-opacity', 0);
 
-    mapwizeMap.on('zoom', () => {
-           //console.log(mapwizeMap.getZoom());
-           //mapwizeMap.setPaintProperty("mapwize_directions_dash", 'line-width', Math.round(mapwizeMap.getZoom()));
-
-         });
-
-    mapwizeMap.on('mapwize:click', e => {
-        if (e.place !== null){
-          mapwizeMap.setPlaceStyle(e.place, {
-            fillColor: '#000000',
-            fillOpacity: 0.2
-          });
-          if (this._selectedPlace!== undefined){
-              mapwizeMap.setPlaceStyle(this._selectedPlace._id, {fillOpacity:0});
-          }
-          this._selectedPlace = e.place;
+    map.setLayoutProperty('position','icon-size',2);
 
 
-        //  showPlace(e.place);
-        //  app.navigateDisabled = false;
+    map.setLayoutProperty('mapwize_places_symbol','text-size',33);
+    map.setLayoutProperty('mapwize_places_symbol','text-optional',false);
+    map.setLayoutProperty('mapwize_places_symbol','icon-size',1.5);
+    map.setPaintProperty('mapwize_places_symbol','text-color','#FFFFFF');
+    map.setPaintProperty('mapwize_places_symbol','text-halo-width',0);
 
-        }
-         // app.name = e.place.name;
-         // app.articles = e.place.data ? e.place.data.articles : [];
-    })
+    map.setLayoutProperty('mapwize_directions_dash', 'line-cap', 'square');
+    map.setPaintProperty("mapwize_directions_dash", 'line-color', '#FAD23C');
+    map.setPaintProperty("mapwize_directions_dash", 'line-width', 20);
+    map.setPaintProperty("mapwize_directions_dash", 'line-dasharray',[1,0]);
+
+    map.setPaintProperty("mapwize_directions", 'line-width', 0);
+
+    map.setPaintProperty("background", 'background-color','#ABABAB');
+
+    map.setMinZoom(20);
 
   },
-  showDirections: function(){
-    const newPlace = store.state.selectedPlace;
+
+  init: function(mapwizeMap, poiPosition){
+    this.map = mapwizeMap; //save the map in the object, for later use.
+    this._poi = poiPosition;
+
+    //Initital setup of the map
+    mapwizeMap.setFloor(1);
+    mapwizeMap.setUserPosition({
+      latitude:   poiPosition.latitude,
+      longitude:  poiPosition.longitude,
+      floor:      poiPosition.floor,
+      accuracy:   8
+    });
+
+    //Change the style of the layers
+    this._changeMapStyle(mapwizeMap);
+
+    //subscribe for changes in the store to react in the map.
+    store.subscribe((mutation, state) => {
+      if (mutation.type === "changePlace"){
+        //this.showMarker();
+        this._highlightPlace();
+      //  this.showDirections();
+      }
+    });
+    //Once the places are loaded into the store, we can load the lists
+    store.subscribe((mutation, state) => {
+      if (mutation.type === "assignPlaces"){
+        this._loadPlaceLists();
+      }
+    });
+
+    this._addMapEvents(mapwizeMap);
+  },
+
+ _addMapEvents: function(map) {
+
+   map.on('mapwize:markerclick', e => {
+            this._showDirections();
+          });
+
+   map.on('mapwize:click', e => {
+        if (e.place !== null){
+          store.commit({
+            type: 'changePlace',
+            place: e.place
+          });
+        }
+    })
+ },
+
+  _highlightPlace: function (){
+    const selectedPlace = store.state.selectedPlace;
+    const previousPlace = store.state.previousPlace;
+    if (previousPlace === selectedPlace) return;
+    const marker = store.state.marker;
+    const _removeMarker = marker.floor !== undefined;
+    const _removePrevious = previousPlace._id !== undefined;
+
+    _removePrevious ? this._removeSelectedPlace(previousPlace) : null;
+    _removeMarker ? this.map.removeMarker(store.state.marker) : null;
+
+    this.map.setPlaceStyle(selectedPlace, this._highLightStyle);
+    this._displayMarker();
+    this._fitBounds();
+  },
+
+  _fitBounds: function() {
+    const userPosition = {
+      latitude : this._poi.latitude,
+      longitude: this._poi.longitude,
+      bearing: this._poi.bearing
+    }
+    const selectedPlace = store.state.selectedPlace;
+    var bounds = new this.map.LngLatBounds();
+    console.log(selectedPlace);
+//     var bbox = [[-79, 43], [-73, 45]];
+// map.fitBounds(bbox, {
+//   padding: {top: 10, bottom:25, left: 15, right: 5}
+// });
+
+  },
+
+  _displayMarker: function(){
+    const selectedPlace = store.state.selectedPlace;
+    this.map.addMarkerOnPlace(selectedPlace).then(marker => {
+        //store marker reference
+        store.commit({
+          type: 'addMarker',
+          marker: marker
+        });
+      }).catch(err => {
+          console.log(err);
+      });
+  },
+
+  _removeSelectedPlace: function(place){
+    const directionsVisible = store.state.directionsVisible;
+    this.map.setPlaceStyle(place._id, {fillOpacity:0});
+    directionsVisible ? this._removeDirections() : null;
+
+  },
+
+  _removeDirections: function(){
+    this.map.removeDirection();
+    store.commit({
+      type: 'toggleDirections',
+      visible: false
+    });
+  },
+
+  _showDirections: function(){
+    const selectedPlace = store.state.selectedPlace;
+    const directionsVisible = store.state.directionsVisible;
+
+    if (directionsVisible) return;
 
     Mapwize.Api.getDirection({
         from: {
@@ -100,36 +179,28 @@ const MapTools = {
           floor: 1
         },
         to: {
-          placeId: newPlace._id
+          placeId: selectedPlace._id
         },
         waypoints: [],
         options: {}
         }).then(direction => {
           this.map.setDirection(direction);
           //this.map.getSource("mapwize_directions").setData(direction.route[0].path);
-          this.map.setBearing(48.1);
-
+          this.map.setBearing(this._poi.bearing);
+          store.commit({
+            type: 'toggleDirections',
+            visible: true
+          });
         });
   },
 
-
   initConfig: {
-    bearing: 48.1,
     container: 'mapContainer',
     zoom: 20.338757675284295,
-    userPosition: false,
-    navigationControl: false,
-    floorControl: false,
     venueId: '5b8ffe23051cd90021bd526f',
     floor: 1,
     color: '#fad23c',
     center:[8.375177110719962, 47.42209953906886], //longLat
-    userPosition: {
-      latitude: 47.42209953906886,
-      longitude: 8.375177110719962,
-      floor: 1,
-      accuracy: 8
-    }
   },
 
   mapConfig: {
@@ -170,37 +241,9 @@ const MapTools = {
       }
     }
 
-    class FloorControl {
-      onAdd(map){
-        this.map = map;
-        this.container = document.createElement('div');
-        this.container.className = 'floor-control';
-        this.button = document.createElement('button');
-        this.icon = document.createElement('i');
-        this.icon.className = 'fas fa-search';
-        this.button.appendChild(this.icon);
+    const searchControl = new SearchControl();
+    this.map.addControl(searchControl,'top-right');
 
-        this.button.addEventListener('click',(e)=>{
-          e.stopPropagation();
-          store.commit('toggleSearch');
-        },false );
-        this.container.appendChild(this.button);
-
-        return this.container;
-      }
-      onRemove(){
-        this.container.parentNode.removeChild(this.container);
-        this.map = undefined;
-      }
-    }
-
-    const myCustomControl = new SearchControl();
-    this.map.addControl(myCustomControl,'top-right');
-  //  const m = this.map._controls[1];
-//    this.map.removeControl(this.map._controls[0]);
-  //  this.map.removeControl(this.map._controls[1]);
-  //  this.map.removeControl(this.map._controls[2]);
-  //  this.map.addControl(m,'top-left');
   },
 
   getVenue: function(map){
@@ -210,14 +253,13 @@ const MapTools = {
     return map.getFloors();
   },
 
-  loadPlaceLists: function(){
+  _loadPlaceLists: function(){
 
     Mapwize.Api.search({
         query: 'departments',
         venueId:  '5b8ffe23051cd90021bd526f',
         objectClass: ['placeList']
     }).then((results) => {
-      console.log(results);
       store.commit({
         type: 'assignPlaceLists',
         placeLists: results.hits,
@@ -229,16 +271,11 @@ const MapTools = {
         venueId:  '5b8ffe23051cd90021bd526f',
         objectClass: ['placeList']
     }).then((results) => {
-      console.log(results);
       store.commit({
         type: 'assignFacilities',
         facilities: results.hits,
       });
     });
-
-
-
-
 
   },
 
@@ -260,7 +297,6 @@ const MapTools = {
                 }
             })
 
-
             products.sort(function(a, b) {
                 var nameA = a.name.toUpperCase(); // ignore upper and lowercase
                 var nameB = b.name.toUpperCase(); // ignore upper and lowercase
@@ -277,7 +313,6 @@ const MapTools = {
 
             letters = [...new Set(letters)];
             letters.sort();
-
             store.commit({
               type: 'assignPlaces',
               places: places, //allPlaces,

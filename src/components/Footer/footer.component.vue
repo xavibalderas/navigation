@@ -10,9 +10,6 @@
 
     <div class="right-content">
       <ul class="services">
-        <li>hdhd</li>
-        <li>hdhd</li>
-        <li>hdhd</li>
       </ul>
     </div>
 
