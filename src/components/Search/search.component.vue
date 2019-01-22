@@ -21,7 +21,7 @@
         <h3>{{fL.name}}</h3>
           <ul>
             <template v-for="(id) in fL.placeIds">
-              <li><a v-on:click="selectPlace(placeById(id))">{{placeById(id).name}}</a></li>
+              <li><a class="link-with-icon" v-on:click="selectPlace(placeById(id))"><img width="75px" class="facility-icon" v-bind:src=placeById(id).style.markerUrl /> - {{placeById(id).name}}</a></li>
               </template>
           </ul>
         </template>
@@ -49,7 +49,9 @@ export default {
     ]), //computed
   methods:{
     placeById(_id){
-        return this.places.find(pl => pl._id===_id);
+        const _p = this.places.find(pl => pl._id===_id);
+        console.log(_p);
+        return _p;
     },
     closeSearch: function(event){
       console.log("hola");

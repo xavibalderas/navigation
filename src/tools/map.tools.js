@@ -80,6 +80,7 @@ const MapTools = {
       if (mutation.type === "changePlace"){
         //this.showMarker();
         this._highlightPlace();
+        this._loadIncludedPlaces();
       //  this.showDirections();
       }
     });
@@ -261,6 +262,26 @@ const MapTools = {
   },
   getFloors: function(map){
     return map.getFloors();
+  },
+
+  _loadIncludedPlaces: function(){
+    const selectedPlace = store.state.selectedPlace;
+    const previousPlace = store.state.previousPlace;
+    if (previousPlace === selectedPlace) return;
+
+    Mapwize.Api.getPlaces({
+        latitudeMin:  selectedPlace.latitudeMin,
+        latitudeMax:  selectedPlace.latitudeMax,
+        longitudeMin:  selectedPlace.longitudeMin,
+        longitudeMax:  selectedPlace.longitudeMax,
+        floor:  selectedPlace.floor
+    }).then((places) => {
+        store.commit({
+          type: 'assignContainedPlaces',
+          placeLists: places,
+        });
+    });
+
   },
 
   _loadPlaceLists: function(){

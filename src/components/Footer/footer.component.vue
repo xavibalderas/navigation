@@ -11,8 +11,8 @@
     </div>
 
     <div class="right-content">
-      <ul class="services">
-      </ul>
+      <ContainedPlaces/>
+
     </div>
 
   </div>
@@ -21,9 +21,14 @@
 
 <script>
 import { mapState } from 'vuex';
+import ContainedPlaces from '../ContainedPlaces/ContainedPlaces.component.vue';
+
 
 export default {
   name: 'Footer',
+  components: {
+    ContainedPlaces
+  },
   computed: mapState([
   'selectedPlace'
   ]),

@@ -21,7 +21,8 @@ export default new Vuex.Store({
     showSearch: false,
     marker: {},
     previousPlace: {},
-    directionsVisible: false
+    directionsVisible: false,
+    containedPlaces: {}
   },
   mutations: {
     assignPlaces (state, payload){
@@ -55,6 +56,9 @@ export default new Vuex.Store({
     },
     assignFacilities (state, payload) {
       state.facilities = payload.facilities;
+    },
+    assignContainedPlaces (state, payload) {
+      state.containedPlaces = payload.placeLists;
     },
     toggleDirections (state, payload) {
       state.directionsVisible = payload.visible;
