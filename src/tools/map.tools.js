@@ -1,7 +1,7 @@
 var Mapwize = require('mapwize');
 import store from '../store'
 import {
-  getBoundingBox
+  getBoundingBox, insideBoundingBox
 } from 'geolocation-utils'
 
 const placeTypesDepartments = [
@@ -22,7 +22,7 @@ const MapTools = {
 
 
     //Hide all the layers that are not needed
-    const _layers = map.getStyle().layers;
+    var _layers = map.getStyle().layers;
 
     _layers.forEach((_l)=>{
       if (!_l.id.includes('mapwize') && _l.id!=='background' && _l.id!=='position'){
@@ -50,6 +50,7 @@ const MapTools = {
     map.setPaintProperty("mapwize_directions_dash", 'line-color', '#FAD23C');
     map.setPaintProperty("mapwize_directions_dash", 'line-width', 20);
     map.setPaintProperty("mapwize_directions_dash", 'line-dasharray',[1,1]);
+    map.setPaintProperty("mapwize_directions_dash", 'line-gap-width',0);
 
     map.setPaintProperty("mapwize_directions", 'line-width', 0);
 
@@ -62,6 +63,7 @@ const MapTools = {
   init: function(mapwizeMap, poiPosition){
     this.map = mapwizeMap; //save the map in the object, for later use.
     this._poi = poiPosition;
+    this.marker = {};
     mapwizeMap.setPreferredLanguage('en');
 
     //Initital setup of the map
@@ -95,68 +97,103 @@ const MapTools = {
     this._addMapEvents(mapwizeMap);
   },
 
- _addMapEvents: function(map) {
+   _addMapEvents: function(map) {
 
-   map.on('mapwize:markerclick', e => {
-            this._showDirections();
-          });
+     map.on('mapwize:markerclick', e => {
+              this._showDirections();
+            });
 
-   map.on('mapwize:click', e => {
-        if (e.place !== null){
-          store.commit({
-            type: 'changePlace',
-            place: e.place
-          });
-        }
-    })
- },
+     map.on('mapwize:click', e => {
+          if (e.place !== null){
+            store.commit({
+              type: 'changePlace',
+              place: e.place
+            });
+          }
+      });
+
+      map.on('zoom', function() {
+
+      });
+
+   },
 
   _highlightPlace: function (){
     const selectedPlace = store.state.selectedPlace;
     const previousPlace = store.state.previousPlace;
     if (previousPlace === selectedPlace) return;
-    const marker = store.state.marker;
+    const marker = this.marker; //store.state.marker;
     const _removeMarker = marker.floor !== undefined;
     const _removePrevious = previousPlace._id !== undefined;
     _removePrevious ? this._removeSelectedPlace(previousPlace) : null;
-    _removeMarker ? this.map.removeMarker(store.state.marker) : null;
+    _removeMarker ? this.map.removeMarker(this.marker) : null;
 
     this.map.setPlaceStyle(selectedPlace, this._highLightStyle);
+    //this._showDirections();
     this._displayMarker();
-  //  this._fitBounds();
+    this._fitBounds();
   },
 
   _fitBounds: function() {
+
+    var _visibleBounds = this.map.getBounds();
     const userPosition = {
       latitude : this._poi.latitude,
       longitude: this._poi.longitude,
       bearing: this._poi.bearing
     }
-    const selectedPlace = store.state.selectedPlace;
-    const _geometry = selectedPlace.geometry.coordinates[0];
+    const selectedPlace = Object.assign({} ,store.state.selectedPlace);
+    console.log(selectedPlace);
+    var _geometry = [];
+    if (Array.isArray(selectedPlace.geometry.coordinates[0])){
+      _geometry = selectedPlace.geometry.coordinates[0].slice();
+    }else {
+      _geometry.push(selectedPlace.geometry.coordinates.slice());
+    }
+    console.log(_geometry);
     _geometry.push([userPosition.longitude, userPosition.latitude]);
-    //const margin = 10 // meters
-    const box = getBoundingBox(_geometry);
-    console.log(box);
-    //var bbox = [[ box.topLeft[1],box.bottomRight[0]],[box.bottomRight[1], box.topLeft[0]]];//box.bottomRight[0], box.topLeft];
+    const margin = 10 // meters
+    const box = getBoundingBox(_geometry, margin);
+
+    // change from lat/lon to lon/lat;
     var bbox = [[ box.topLeft[0],box.bottomRight[1]],[box.bottomRight[0], box.topLeft[1]]];//box.bottomRight[0], box.topLeft];
-    console.log(bbox);
+    if (this._checkIfBoundingBoxIncluded(_visibleBounds, bbox)) return;
     var cameraTransform = this.map.cameraForBounds(bbox, {
-   padding: {top: 10, bottom:25, left: 15, right: 5} });
-   console.log(cameraTransform);
-   cameraTransform.bearing = userPosition.bearing;
-   this.map.flyTo(cameraTransform);
-   //this.map.setBearing(userPosition.bearing);
+      padding: {top: 10, bottom:25, left: 15, right: 5}
+    });
+    cameraTransform.bearing = userPosition.bearing;
+    this.map.easeTo(cameraTransform);
+
+  },
+
+  _checkIfBoundingBoxIncluded: function (bounding, polygon){
+    //polygon is an array in the form:
+    //  [lon, lat]
+    //bounding is in the format sw/ne : lng/lat we need it in nw/se : lat/ln. Bounding is and LngLatBounds object from Mapbox
+      //bounding
+      const nw = bounding.getNorthWest();
+      const se = bounding.getSouthEast();
+
+      const box = {
+        topLeft:     {lat: nw.lat, lon: nw.lng},
+        bottomRight: {lat: se.lat, lon: se.lng}
+      }
+      const _r = polygon.reduce((accumulator, currentValue) => {
+        //we reduce the array, if just one is false, the end result is false.
+        //const _in = insideBoundingBox({lat:currentValue[1], lon:currentValue[0]}, box);
+        return insideBoundingBox({lat:currentValue[1], lon:currentValue[0]}, box) && accumulator;
+        //return true;
+      }, true);
+      console.log(_r);
+      return _r;
+
   },
 
   _displayMarker: function(){
     const selectedPlace = store.state.selectedPlace;
     this.map.addMarkerOnPlace(selectedPlace).then(marker => {
         //store marker reference
-        store.commit({
-          type: 'addMarker',
-          marker: marker
-        });
+        this.marker = marker;
       }).catch(err => {
           console.log(err);
       });
@@ -170,11 +207,11 @@ const MapTools = {
   },
 
   _removeDirections: function(){
-    this.map.removeDirection();
-    store.commit({
-      type: 'toggleDirections',
-      visible: false
-    });
+   this.map.removeDirection();
+   store.commit({
+     type: 'toggleDirections',
+     visible: false
+   });
   },
 
   _showDirections: function(){
@@ -212,6 +249,9 @@ const MapTools = {
     floor: 1,
     color: '#fad23c',
     center:[8.375177110719962, 47.42209953906886], //longLat
+    dragRotate: false,
+    touchZoomRotate: false,
+    doubleClickZoom: false
   },
 
   mapConfig: {
@@ -252,8 +292,59 @@ const MapTools = {
       }
     }
 
+    class ZoomInControl {
+      onAdd(map){
+        this.map = map;
+        this.container = document.createElement('div');
+        this.container.className = 'zoomin-control';
+        this.button = document.createElement('button');
+        this.icon = document.createElement('i');
+        this.icon.className = 'fas fa-plus';
+        this.button.appendChild(this.icon);
+
+        this.button.addEventListener('click',(e)=>{
+          this.map.zoomIn();
+        },false );
+        this.container.appendChild(this.button);
+
+        return this.container;
+      }
+      onRemove(){
+        this.container.parentNode.removeChild(this.container);
+        this.map = undefined;
+      }
+    }
+    class ZoomOutControl {
+      onAdd(map){
+        this.map = map;
+        this.container = document.createElement('div');
+        this.container.className = 'zoomout-control';
+        this.button = document.createElement('button');
+        this.icon = document.createElement('i');
+        this.icon.className = 'fas fa-minus';
+        this.button.appendChild(this.icon);
+
+        this.button.addEventListener('click',(e)=>{
+          e.stopPropagation();
+          this.map.zoomOut();
+        },false );
+        this.container.appendChild(this.button);
+
+        return this.container;
+      }
+      onRemove(){
+        this.container.parentNode.removeChild(this.container);
+        this.map = undefined;
+      }
+    }
+
+
     const searchControl = new SearchControl();
+    const zoomInControl = new ZoomInControl();
+    const zoomOutControl = new ZoomOutControl();
     this.map.addControl(searchControl,'top-right');
+    this.map.addControl(zoomInControl,'top-left');
+    this.map.addControl(zoomOutControl,'top-left');
 
   },
 
@@ -341,7 +432,6 @@ const MapTools = {
                 // names must be equal
                 return 0;
               });
-              console.log(places);
             letters = [...new Set(letters)];
             letters.sort();
             store.commit({

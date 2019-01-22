@@ -76,7 +76,6 @@ export default new Vuex.Store({
       if (_p === undefined) return;
       if (_p.translations === undefined) return;
       const _t = _p.translations.find(_tr => _tr.language === state.language );
-      console.log(_t);
       return _t[propName]
     }
 
