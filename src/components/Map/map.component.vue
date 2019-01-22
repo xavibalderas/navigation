@@ -23,6 +23,7 @@ export default {
   mounted: function () {
 
         Mapwize.apiKey('3d2dafbf53a14c95cee47c2348f9c5c3');
+        
         const mapwizeMap = new Mapwize.Map({
         bearing:48.1,
         ...MapTools.initConfig}, MapTools.mapConfig);

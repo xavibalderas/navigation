@@ -3,6 +3,7 @@
   <Header/>
   <Map />
   <Footer />
+  <Youarehere />
   </div>
 </template>
 
@@ -11,13 +12,15 @@
 import Header from './components/Header/header.component.vue';
 import Map from './components/Map/map.component.vue';
 import Footer from './components/Footer/footer.component.vue';
+import Youarehere from './components/Youarehere/Youarehere.component.vue';
 
 export default {
   name: 'app',
   components: {
     Header,
     Map,
-    Footer
+    Footer,
+    Youarehere
   }
 }
 </script>

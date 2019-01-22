@@ -5,6 +5,7 @@ import store from './store'
 import VueAnalytics from 'vue-analytics'
 
 
+
 Vue.config.productionTip = false
 Vue.component('tabs', Tabs);
 Vue.component('tab', Tab);

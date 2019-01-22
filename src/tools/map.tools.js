@@ -1,5 +1,8 @@
 var Mapwize = require('mapwize');
 import store from '../store'
+import {
+  getBoundingBox
+} from 'geolocation-utils'
 
 const placeTypesDepartments = [
    '57ff3c976e2cc00b00566a0d',
@@ -20,9 +23,10 @@ const MapTools = {
 
     //Hide all the layers that are not needed
     const _layers = map.getStyle().layers;
+    console.log(_layers);
     _layers.forEach((_l)=>{
       if (!_l.id.includes('mapwize') && _l.id!=='background' && _l.id!=='position'){
-        map.setLayoutProperty(_l.id, 'visibility', 'none');
+      //  map.setLayoutProperty(_l.id, 'visibility', 'none');
       }
     })
 
@@ -36,7 +40,6 @@ const MapTools = {
 
     map.setLayoutProperty('position','icon-size',2);
 
-
     map.setLayoutProperty('mapwize_places_symbol','text-size',33);
     map.setLayoutProperty('mapwize_places_symbol','text-optional',false);
     map.setLayoutProperty('mapwize_places_symbol','icon-size',1.5);
@@ -46,7 +49,7 @@ const MapTools = {
     map.setLayoutProperty('mapwize_directions_dash', 'line-cap', 'square');
     map.setPaintProperty("mapwize_directions_dash", 'line-color', '#FAD23C');
     map.setPaintProperty("mapwize_directions_dash", 'line-width', 20);
-    map.setPaintProperty("mapwize_directions_dash", 'line-dasharray',[1,0]);
+    map.setPaintProperty("mapwize_directions_dash", 'line-dasharray',[1,1]);
 
     map.setPaintProperty("mapwize_directions", 'line-width', 0);
 
@@ -119,7 +122,7 @@ const MapTools = {
 
     this.map.setPlaceStyle(selectedPlace, this._highLightStyle);
     this._displayMarker();
-    this._fitBounds();
+  //  this._fitBounds();
   },
 
   _fitBounds: function() {
@@ -129,13 +132,20 @@ const MapTools = {
       bearing: this._poi.bearing
     }
     const selectedPlace = store.state.selectedPlace;
-    var bounds = new this.map.LngLatBounds();
-    console.log(selectedPlace);
-//     var bbox = [[-79, 43], [-73, 45]];
-// map.fitBounds(bbox, {
-//   padding: {top: 10, bottom:25, left: 15, right: 5}
-// });
-
+    const _geometry = selectedPlace.geometry.coordinates[0];
+    _geometry.push([userPosition.longitude, userPosition.latitude]);
+    //const margin = 10 // meters
+    const box = getBoundingBox(_geometry);
+    console.log(box);
+    //var bbox = [[ box.topLeft[1],box.bottomRight[0]],[box.bottomRight[1], box.topLeft[0]]];//box.bottomRight[0], box.topLeft];
+    var bbox = [[ box.topLeft[0],box.bottomRight[1]],[box.bottomRight[0], box.topLeft[1]]];//box.bottomRight[0], box.topLeft];
+    console.log(bbox);
+    var cameraTransform = this.map.cameraForBounds(bbox, {
+   padding: {top: 10, bottom:25, left: 15, right: 5} });
+   console.log(cameraTransform);
+   cameraTransform.bearing = userPosition.bearing;
+   this.map.flyTo(cameraTransform);
+   //this.map.setBearing(userPosition.bearing);
   },
 
   _displayMarker: function(){

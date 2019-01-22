@@ -4,7 +4,9 @@
     <div class="left-content">
       <h2>{{this.selectedPlace.name}}</h2>
       <p v-if="this.selectedPlace.data !== undefined">
+        <template v-if="this.selectedPlace.data.articles !== undefined" >
                 {{this.selectedPlace.data.articles.join(', ')}}
+                </template>
       </p>
     </div>
 
