@@ -23,10 +23,10 @@ const MapTools = {
 
     //Hide all the layers that are not needed
     const _layers = map.getStyle().layers;
-    console.log(_layers);
+
     _layers.forEach((_l)=>{
       if (!_l.id.includes('mapwize') && _l.id!=='background' && _l.id!=='position'){
-      //  map.setLayoutProperty(_l.id, 'visibility', 'none');
+        map.setLayoutProperty(_l.id, 'visibility', 'none');
       }
     })
 
@@ -62,6 +62,7 @@ const MapTools = {
   init: function(mapwizeMap, poiPosition){
     this.map = mapwizeMap; //save the map in the object, for later use.
     this._poi = poiPosition;
+    mapwizeMap.setPreferredLanguage('en');
 
     //Initital setup of the map
     mapwizeMap.setFloor(1);
@@ -117,7 +118,6 @@ const MapTools = {
     const marker = store.state.marker;
     const _removeMarker = marker.floor !== undefined;
     const _removePrevious = previousPlace._id !== undefined;
-
     _removePrevious ? this._removeSelectedPlace(previousPlace) : null;
     _removeMarker ? this.map.removeMarker(store.state.marker) : null;
 
@@ -316,12 +316,13 @@ const MapTools = {
           venueId: '5b8ffe23051cd90021bd526f'
         }).then(places => {
             var floors = store.state.floors;
+            const _language = store.state.language;
             var products = [];
             var letters = [];
             places.forEach((element)=>{
                 this.map.setPlaceStyle(element._id,{fillOpacity:0});
-                if (element.data !== undefined && element.data.articles!== undefined) {
-                  element.data.articles.forEach((article)=> {
+                if (element.data !== undefined && element.data[_language]!== undefined) {
+                  element.data[_language].forEach((article)=> {
                     products.push({name: article, placeId: element._id, letter: article.toUpperCase().charAt(0)});
                     letters.push(article.toUpperCase().charAt(0));
                   });
@@ -337,11 +338,10 @@ const MapTools = {
                 if (nameA > nameB) {
                   return 1;
                 }
-
                 // names must be equal
                 return 0;
               });
-
+              console.log(places);
             letters = [...new Set(letters)];
             letters.sort();
             store.commit({

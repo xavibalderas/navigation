@@ -22,7 +22,8 @@ export default new Vuex.Store({
     marker: {},
     previousPlace: {},
     directionsVisible: false,
-    containedPlaces: {}
+    containedPlaces: {},
+    language: 'en'
   },
   mutations: {
     assignPlaces (state, payload){
@@ -62,7 +63,23 @@ export default new Vuex.Store({
     },
     toggleDirections (state, payload) {
       state.directionsVisible = payload.visible;
+    },
+
+  },
+  getters: {
+    getPlaceById: (state) => (id) => {
+      const _p = state.places.find(pl => pl._id===id);
+      return _p;
+    },
+    getTranslation: (state, getters) => (placeId, propName) => {
+      const _p = getters.getPlaceById(placeId)
+      if (_p === undefined) return;
+      if (_p.translations === undefined) return;
+      const _t = _p.translations.find(_tr => _tr.language === state.language );
+      console.log(_t);
+      return _t[propName]
     }
+
   },
   actions: {
 

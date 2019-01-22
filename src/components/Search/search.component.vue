@@ -8,7 +8,7 @@
         <h3>{{pL.name}}</h3>
           <ul>
             <template v-for="(id) in pL.placeIds">
-              <li><a <a v-on:click="selectPlace(placeById(id))">{{placeById(id).name}}</a></li>
+              <li><a <a v-on:click="selectPlace(placeById(id))">{{getTranslation(id,'title')}}</a></li>
               </template>
           </ul>
         </template>
@@ -36,6 +36,8 @@
 import CloseButton from '../CloseButton/CloseButton.component.vue';
 import ProductList from '../ProductList/ProductList.component.vue';
 import { mapState } from 'vuex';
+import { mapGetters } from 'vuex'
+
 
 
 export default {
@@ -44,13 +46,18 @@ export default {
     CloseButton,
     ProductList
   }, //components
-  computed: mapState([
-      'departments', 'facilities', 'placeLists', 'places'
-    ]), //computed
+  computed: {
+  ...mapGetters([
+     'getTranslation',
+     'getPlaceById'
+   ]),
+   ...mapState([
+       'departments', 'facilities', 'placeLists', 'places'
+     ])
+  }, //computed
   methods:{
     placeById(_id){
         const _p = this.places.find(pl => pl._id===_id);
-        console.log(_p);
         return _p;
     },
     closeSearch: function(event){
