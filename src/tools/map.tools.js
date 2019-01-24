@@ -3,6 +3,8 @@ import store from '../store'
 import {
   getBoundingBox, insideBoundingBox
 } from 'geolocation-utils'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
 
 const placeTypesDepartments = [
    '57ff3c976e2cc00b00566a0d',
@@ -273,18 +275,20 @@ const MapTools = {
     class SearchControl {
       onAdd(map){
         this.map = map;
-        this.container = document.createElement('div');
-        this.container.className = 'search-control';
-        this.button = document.createElement('button');
-        this.icon = document.createElement('i');
-        this.icon.className = 'fas fa-search';
-        this.button.appendChild(this.icon);
-
-        this.button.addEventListener('click',(e)=>{
-          e.stopPropagation();
-          store.commit('toggleSearch');
-        },false );
-        this.container.appendChild(this.button);
+        this.container = document.getElementById('search-control');
+        // console.log(this.co);
+        // this.container = document.createElement('div');
+        // this.container.className = 'search-control';
+        // this.button = document.createElement('button');
+        // this.icon = document.createElement('i');
+        // this.icon.className = 'fas fa-search';
+        // this.button.appendChild(this.icon);
+        //
+        // this.button.addEventListener('click',(e)=>{
+        //   e.stopPropagation();
+        //   store.commit('toggleSearch');
+        // },false );
+        // this.container.appendChild(this.button);
 
         return this.container;
       }

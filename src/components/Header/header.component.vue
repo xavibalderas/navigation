@@ -1,6 +1,6 @@
 <template>
 <div id="header">
-    <i class="fas fa-map-marker-alt"></i><h1>Finde was du suchst<br/>im IKEA Spreitenbach</h1>
+    <font-awesome-icon icon="map-marker-alt"/></i><h1>Finde was du suchst<br/>im IKEA Spreitenbach</h1>
 </div>
 </template>
 

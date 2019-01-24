@@ -2,6 +2,13 @@
 <div id="map">
   <div id="mapContainer"></div>
   <Search v-show="showSearch"/>
+  <div id="controls">
+    <div id="search-control">
+      <button v-on:click="searchButton()">
+        <font-awesome-icon icon="search"/>
+      </button>
+    </div>
+  </div>
 </div>
 </template>
 
@@ -20,6 +27,11 @@ export default {
   computed: mapState([
   'showSearch'
   ]),
+  methods: {
+    searchButton: function (event){
+      this.$store.commit('toggleSearch');
+    }
+  },
   mounted: function () {
 
         Mapwize.apiKey('3d2dafbf53a14c95cee47c2348f9c5c3');
