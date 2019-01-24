@@ -143,14 +143,12 @@ const MapTools = {
       bearing: this._poi.bearing
     }
     const selectedPlace = Object.assign({} ,store.state.selectedPlace);
-    console.log(selectedPlace);
     var _geometry = [];
     if (Array.isArray(selectedPlace.geometry.coordinates[0])){
       _geometry = selectedPlace.geometry.coordinates[0].slice();
     }else {
       _geometry.push(selectedPlace.geometry.coordinates.slice());
     }
-    console.log(_geometry);
     _geometry.push([userPosition.longitude, userPosition.latitude]);
     const margin = 10 // meters
     const box = getBoundingBox(_geometry, margin);
@@ -178,6 +176,10 @@ const MapTools = {
         topLeft:     {lat: nw.lat, lon: nw.lng},
         bottomRight: {lat: se.lat, lon: se.lng}
       }
+      console.log("bounding");
+      console.log(box);
+      console.log('polygon');
+      console.log(polygon)
       const _r = polygon.reduce((accumulator, currentValue) => {
         //we reduce the array, if just one is false, the end result is false.
         //const _in = insideBoundingBox({lat:currentValue[1], lon:currentValue[0]}, box);
