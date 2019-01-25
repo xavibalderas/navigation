@@ -6,6 +6,7 @@ import VueAnalytics from 'vue-analytics'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faSearch, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import router from './router'
 
 
 library.add(faSearch, faMapMarkerAlt)
@@ -21,5 +22,6 @@ Vue.use(VueAnalytics, {
 
 new Vue({
   store,
+  router,
   render: h => h(App)
 }).$mount('#app')

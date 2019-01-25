@@ -2,7 +2,7 @@
 <div id="search">
   <div class="content">
   <CloseButton v-on:close-window="closeSearch"/>
-    <tabs>
+    <tabs :options="{ useUrlFragment: false }">
       <tab name="Räume">
         <template v-for="(pL) in this.placeLists">
         <h3>{{pL.name}}</h3>

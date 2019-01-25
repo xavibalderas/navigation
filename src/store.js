@@ -23,7 +23,11 @@ export default new Vuex.Store({
     previousPlace: {},
     directionsVisible: false,
     containedPlaces: {},
-    language: 'en'
+    language: 'en',
+    bearing: 0,
+    lat: 0,
+    lng: 0,
+    floor: 0
   },
   mutations: {
     assignPlaces (state, payload){
@@ -64,6 +68,14 @@ export default new Vuex.Store({
     toggleDirections (state, payload) {
       state.directionsVisible = payload.visible;
     },
+    setPoiOptions (state, payload) {
+      state.language = payload.language;
+      state.bearing = payload.bearing;
+      state.lat = payload.lat;
+      state.lng = payload.lng;
+      state.floor = payload.floor;
+
+    }
 
   },
   getters: {

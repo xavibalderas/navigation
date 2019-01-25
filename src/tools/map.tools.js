@@ -64,18 +64,22 @@ const MapTools = {
 
   init: function(mapwizeMap, poiPosition){
     this.map = mapwizeMap; //save the map in the object, for later use.
+    console.log(poiPosition);
     this._poi = poiPosition;
     this.marker = {};
-    mapwizeMap.setPreferredLanguage('en');
+
+    mapwizeMap.setPreferredLanguage('de');
 
     //Initital setup of the map
-    mapwizeMap.setFloor(1);
+    mapwizeMap.setFloor(this._poi.floor);
     mapwizeMap.setUserPosition({
       latitude:   poiPosition.latitude,
       longitude:  poiPosition.longitude,
       floor:      poiPosition.floor,
       accuracy:   8
     });
+    mapwizeMap.setBearing(this._poi.bearing);
+    mapwizeMap.setFloor(this._poi.floor);
 
     //Change the style of the layers
     this._changeMapStyle(mapwizeMap);

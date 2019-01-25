@@ -1,29 +1,8 @@
 <template>
   <div id="app">
-  <Header/>
-  <Map />
-  <Footer />
-  <Youarehere />
+    <router-view/>
   </div>
 </template>
-
-<script>
-
-import Header from './components/Header/header.component.vue';
-import Map from './components/Map/map.component.vue';
-import Footer from './components/Footer/footer.component.vue';
-import Youarehere from './components/Youarehere/Youarehere.component.vue';
-
-export default {
-  name: 'app',
-  components: {
-    Header,
-    Map,
-    Footer,
-    Youarehere
-  }
-}
-</script>
 
 <style lang="scss">
 #app {

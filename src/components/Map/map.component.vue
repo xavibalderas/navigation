@@ -25,7 +25,7 @@ export default {
     Search,
   },
   computed: mapState([
-  'showSearch'
+  'showSearch', 'bearing', 'lat', 'lng', 'language', 'floor'
   ]),
   methods: {
     searchButton: function (event){
@@ -37,15 +37,15 @@ export default {
         Mapwize.apiKey('3d2dafbf53a14c95cee47c2348f9c5c3');
 
         const mapwizeMap = new Mapwize.Map({
-        bearing:48.1,
-        ...MapTools.initConfig}, MapTools.mapConfig);
+        bearing: this.bearing,
+        ...MapTools.initConfig}, {preferredLanguage: this.language, ...MapTools.mapConfig});
         mapwizeMap.on('mapwize:ready', () => {
             MapTools.init(mapwizeMap, {
-              latitude: 47.42209953906886,
-              longitude: 8.375177110719962,
-              floor: 1,
-              bearing: 48.1,
-              lang: 'en'
+              latitude: this.lat, //47.42209953906886,
+              longitude: this.lng, //8.375177110719962,
+              floor: this.floor, //1,
+              bearing: this.bearing, //48.1,
+              language: this.language //'en'
             });
             MapTools.initInfo(mapwizeMap);
             MapTools.addControls();
