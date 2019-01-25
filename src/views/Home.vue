@@ -35,9 +35,6 @@ export default {
       lng: parseFloat(this.$route.query.lng),
       floor: parseInt(this.$route.query.floor)
     });
-
-    console.log(this.$route);
-    console.log(this.lang);
   }
 }
 </script>

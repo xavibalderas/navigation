@@ -8,6 +8,16 @@
         <font-awesome-icon icon="search"/>
       </button>
     </div>
+    <div id="zoomin-control">
+      <button v-on:click="zoomIn()">
+        <font-awesome-icon icon="plus"/>
+      </button>
+    </div>
+    <div id="zoomout-control">
+      <button v-on:click="zoomOut()">
+        <font-awesome-icon icon="minus"/>
+      </button>
+    </div>
   </div>
 </div>
 </template>
@@ -28,6 +38,12 @@ export default {
   'showSearch', 'bearing', 'lat', 'lng', 'language', 'floor'
   ]),
   methods: {
+    zoomIn: function() {
+      MapTools.zoomIn();
+    },
+    zoomOut: function() {
+      MapTools.zoomOut();
+    },
     searchButton: function (event){
       this.$store.commit('toggleSearch');
     }
@@ -35,7 +51,7 @@ export default {
   mounted: function () {
 
         Mapwize.apiKey('3d2dafbf53a14c95cee47c2348f9c5c3');
-
+        console.log(this.language);
         const mapwizeMap = new Mapwize.Map({
         bearing: this.bearing,
         ...MapTools.initConfig}, {preferredLanguage: this.language, ...MapTools.mapConfig});

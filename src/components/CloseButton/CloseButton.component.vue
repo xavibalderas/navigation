@@ -1,6 +1,8 @@
 <template>
 <div class="close-button">
-  <button v-on:click="close"><i class="fas fa-times-circle"></i></button>
+  <button v-on:click="close">
+    <font-awesome-icon icon="times-circle"/>
+  </button>
 </div>
 </template>
 

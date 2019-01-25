@@ -80,7 +80,7 @@ const MapTools = {
     });
     mapwizeMap.setBearing(this._poi.bearing);
     mapwizeMap.setFloor(this._poi.floor);
-
+    //mapwizeMap.refresh();
     //Change the style of the layers
     this._changeMapStyle(mapwizeMap);
 
@@ -182,17 +182,12 @@ const MapTools = {
         topLeft:     {lat: nw.lat, lon: nw.lng},
         bottomRight: {lat: se.lat, lon: se.lng}
       }
-      console.log("bounding");
-      console.log(box);
-      console.log('polygon');
-      console.log(polygon)
       const _r = polygon.reduce((accumulator, currentValue) => {
         //we reduce the array, if just one is false, the end result is false.
         //const _in = insideBoundingBox({lat:currentValue[1], lon:currentValue[0]}, box);
         return insideBoundingBox({lat:currentValue[1], lon:currentValue[0]}, box) && accumulator;
         //return true;
       }, true);
-      console.log(_r);
       return _r;
 
   },
@@ -280,20 +275,6 @@ const MapTools = {
       onAdd(map){
         this.map = map;
         this.container = document.getElementById('search-control');
-        // console.log(this.co);
-        // this.container = document.createElement('div');
-        // this.container.className = 'search-control';
-        // this.button = document.createElement('button');
-        // this.icon = document.createElement('i');
-        // this.icon.className = 'fas fa-search';
-        // this.button.appendChild(this.icon);
-        //
-        // this.button.addEventListener('click',(e)=>{
-        //   e.stopPropagation();
-        //   store.commit('toggleSearch');
-        // },false );
-        // this.container.appendChild(this.button);
-
         return this.container;
       }
       onRemove(){
@@ -305,18 +286,7 @@ const MapTools = {
     class ZoomInControl {
       onAdd(map){
         this.map = map;
-        this.container = document.createElement('div');
-        this.container.className = 'zoomin-control';
-        this.button = document.createElement('button');
-        this.icon = document.createElement('i');
-        this.icon.className = 'fas fa-plus';
-        this.button.appendChild(this.icon);
-
-        this.button.addEventListener('click',(e)=>{
-          this.map.zoomIn();
-        },false );
-        this.container.appendChild(this.button);
-
+        this.container = document.getElementById('zoomin-control');
         return this.container;
       }
       onRemove(){
@@ -327,19 +297,7 @@ const MapTools = {
     class ZoomOutControl {
       onAdd(map){
         this.map = map;
-        this.container = document.createElement('div');
-        this.container.className = 'zoomout-control';
-        this.button = document.createElement('button');
-        this.icon = document.createElement('i');
-        this.icon.className = 'fas fa-minus';
-        this.button.appendChild(this.icon);
-
-        this.button.addEventListener('click',(e)=>{
-          e.stopPropagation();
-          this.map.zoomOut();
-        },false );
-        this.container.appendChild(this.button);
-
+        this.container = document.getElementById('zoomout-control');
         return this.container;
       }
       onRemove(){
@@ -358,6 +316,12 @@ const MapTools = {
 
   },
 
+  zoomIn: function(){
+    this.map.zoomIn();
+  },
+  zoomOut: function() {
+    this.map.zoomOut();
+  },
   getVenue: function(map){
     Mapwize.Api.getVenue('5b8ffe23051cd90021bd526f').then(venue => {console.log(venue); console.log(map.getFloorsForVenue(venue))});
   },

@@ -23,7 +23,7 @@ export default new Vuex.Store({
     previousPlace: {},
     directionsVisible: false,
     containedPlaces: {},
-    language: 'en',
+    language: '',
     bearing: 0,
     lat: 0,
     lng: 0,

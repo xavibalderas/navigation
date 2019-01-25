@@ -16,7 +16,7 @@
       <tab name="Produkte">
         <ProductList />
       </tab>
-      <tab name="Facilities">
+      <tab name="Service-Einrichtungen">
         <template v-for="(fL) in this.facilities">
         <h3>{{fL.name}}</h3>
           <ul>

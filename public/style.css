@@ -15,7 +15,7 @@ ul{
 .content{
   padding: 50px 100px;
 }
-#search-control, .zoomin-control, .zoomout-control{
+#search-control, #zoomin-control, #zoomout-control{
   background-color: white;
   width: 100px;
   height: 100px;
@@ -23,13 +23,12 @@ ul{
   pointer-events: auto;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2), 0 -1px 0px rgba(0,0,0,0.02);
 }
-#search-control button, .zoomin-control button, .zoomout-control button {
+#search-control button, #zoomin-control button, #zoomout-control button {
   width: 100px;
   height: 100px;
-}
-#search-control .fas, .zoomin-control .fas, .zoomout-control .fas{
   font-size: 50px;
 }
+
 .mapboxgl-ctrl-top-right, .mapboxgl-ctrl-top-left{
   margin: 50px;
 }
