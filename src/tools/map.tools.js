@@ -42,7 +42,7 @@ const MapTools = {
 
     map.setLayoutProperty('position','icon-size',2);
 
-    map.setLayoutProperty('mapwize_places_symbol','text-size',33);
+    map.setLayoutProperty('mapwize_places_symbol','text-size',40);
     map.setLayoutProperty('mapwize_places_symbol','text-optional',false);
     map.setLayoutProperty('mapwize_places_symbol','icon-size',1.5);
     map.setPaintProperty('mapwize_places_symbol','text-color','#FFFFFF');
@@ -118,8 +118,12 @@ const MapTools = {
           }
       });
 
-      map.on('zoom', function() {
+      map.on('click', function(e) {
+        console.log(e);
+      });
 
+      map.on('dragend', function(event){
+        console.log(map.getBounds());
       });
 
    },
@@ -254,7 +258,9 @@ const MapTools = {
     center:[8.375177110719962, 47.42209953906886], //longLat
     dragRotate: false,
     touchZoomRotate: false,
-    doubleClickZoom: false
+    doubleClickZoom: false,
+    maxBounds: [[8.374323,47.420685],[8.377237, 47.422580]] //[[sw_long, sw_lat],[ne_long, ne_lat]] with bearing = 0
+
   },
 
   mapConfig: {
@@ -263,6 +269,7 @@ const MapTools = {
     floorControl: true,
     userPosition: true,
     color: '#fad23c',
+
   },
 
   test: function(){
