@@ -2,7 +2,7 @@
 <div id="in-places">
   <template v-for="(place) in containedPlaces">
     <template v-if="checkIfExists(place._id)">
-      <img width="75px" class="facility-icon" v-bind:src=place.style.markerUrl /> - {{place.name}}
+      <img width="75px" class="facility-icon" v-bind:src=place.style.markerUrl /> - {{place.name}} <br/>
     </template>
   </template>
 </div>

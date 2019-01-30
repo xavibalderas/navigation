@@ -46,7 +46,8 @@ const MapTools = {
     map.setLayoutProperty('mapwize_places_symbol','text-optional',false);
     map.setLayoutProperty('mapwize_places_symbol','icon-size',1.5);
     map.setPaintProperty('mapwize_places_symbol','text-color','#FFFFFF');
-    map.setPaintProperty('mapwize_places_symbol','text-halo-width',0);
+    map.setPaintProperty('mapwize_places_symbol','text-halo-color','#555555');
+    //map.setPaintProperty('mapwize_places_symbol','text-halo-width',0);
 
     map.setLayoutProperty('mapwize_directions_dash', 'line-cap', 'square');
     map.setPaintProperty("mapwize_directions_dash", 'line-color', '#FAD23C');

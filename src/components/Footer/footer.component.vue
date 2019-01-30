@@ -3,11 +3,15 @@
   <div class="content">
     <div class="left-content">
       <h2>{{getTranslation(this.selectedPlace._id, 'title')}}</h2>
-      <p v-if="this.selectedPlace.data !== undefined">
+      <template v-if="this.selectedPlace.data !== undefined">
         <template v-if="this.selectedPlace.data[language] !== undefined" >
-                {{this.selectedPlace.data[language].join(', ')}}
+                <ul>
+                <template v-for="(place) in this.selectedPlace.data[language]">
+                  <li>{{place}}</li>
                 </template>
-      </p>
+                </ul>
+                </template>
+      </template>
     </div>
 
     <div class="right-content">
