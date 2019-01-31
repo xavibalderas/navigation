@@ -3,7 +3,7 @@
   <div class="content">
   <CloseButton v-on:close-window="closeSearch"/>
     <tabs :options="{ useUrlFragment: false }">
-      <tab name="Räume">
+      <tab :name="$t('rooms')">
         <template v-for="(pL) in this.placeLists">
         <h3>{{pL.name}}</h3>
           <ul>
@@ -13,10 +13,10 @@
           </ul>
         </template>
       </tab>
-      <tab name="Produkte">
+      <tab :name="$t('products')">
         <ProductList />
       </tab>
-      <tab name="Service-Einrichtungen">
+      <tab :name="$t('facilities')">
         <template v-for="(fL) in this.facilities">
         <h3>{{fL.name}}</h3>
           <ul>

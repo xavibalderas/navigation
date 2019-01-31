@@ -7,8 +7,8 @@ export default new Vuex.Store({
   state: {
     map: {},
     floors: [
-      {floor: 0, name: 'UG'},
-      {floor: 1, name: 'EG'}
+      {floor: 0, name: 'EG'},
+      {floor: 1, name: 'OG'}
     ],
     places: [],
     placeLists: [],
@@ -69,12 +69,15 @@ export default new Vuex.Store({
       state.directionsVisible = payload.visible;
     },
     setPoiOptions (state, payload) {
-      state.language = payload.language;
+      //state.language = payload.language;
       state.bearing = payload.bearing;
       state.lat = payload.lat;
       state.lng = payload.lng;
       state.floor = payload.floor;
 
+    },
+    setlanguage (state, payload){
+      state.language = payload.l;
     }
 
   },
@@ -89,6 +92,11 @@ export default new Vuex.Store({
       if (_p.translations === undefined) return;
       const _t = _p.translations.find(_tr => _tr.language === state.language );
       return _t[propName]
+    },
+    getFloor: (state) => () =>{
+      const _f = state.floor;
+      const floors = ['EG', 'OG'];
+      return floors[_f];
     }
 
   },

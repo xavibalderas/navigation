@@ -25,6 +25,7 @@ const MapTools = {
 
     //Hide all the layers that are not needed
     var _layers = map.getStyle().layers;
+    console.log(_layers);
 
     _layers.forEach((_l)=>{
       if (!_l.id.includes('mapwize') && _l.id!=='background' && _l.id!=='position'){
@@ -111,6 +112,7 @@ const MapTools = {
             });
 
      map.on('mapwize:click', e => {
+        console.log(e);
           if (e.place !== null){
             store.commit({
               type: 'changePlace',
@@ -120,7 +122,12 @@ const MapTools = {
       });
 
       map.on('click', function(e) {
-        console.log(e);
+        //console.log(e);
+        var _layers = map.getSource('mapwize_places_symbol');
+        console.log(_layers);
+         _layers = map.hasImage('5c51ca7350c2e200168b8648');
+        console.log(_layers);
+
       });
 
       map.on('dragend', function(event){
@@ -366,6 +373,7 @@ const MapTools = {
         venueId:  '5b8ffe23051cd90021bd526f',
         objectClass: ['placeList']
     }).then((results) => {
+      console.log(results);
       store.commit({
         type: 'assignPlaceLists',
         placeLists: results.hits,

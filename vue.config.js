@@ -8,5 +8,14 @@ module.exports = {
 
   css: {
     modules: true
+  },
+
+  pluginOptions: {
+    i18n: {
+      locale: 'de',
+      fallbackLocale: 'de',
+      localeDir: 'locales',
+      enableInSFC: false
+    }
   }
 }
