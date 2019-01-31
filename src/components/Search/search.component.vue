@@ -21,7 +21,7 @@
         <h3>{{getTranslation(fL, 'title')}}</h3>
           <ul>
             <template v-for="(id) in fL.placeIds">
-              <li><a class="link-with-icon" v-on:click="selectPlace(placeById(id))"><img width="75px" class="facility-icon" v-bind:src=placeById(id).style.markerUrl /> - {{placeById(id).name}}</a></li>
+              <li><a class="link-with-icon" v-on:click="selectPlace(placeById(id))"><img width="75px" class="facility-icon" v-bind:src=placeById(id).style.markerUrl /> - {{getTranslationByID(id,'title')}}</a></li>
               </template>
           </ul>
         </template>
