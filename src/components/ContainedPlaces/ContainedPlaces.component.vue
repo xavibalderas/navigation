@@ -10,15 +10,23 @@
 
 <script>
 import { mapState } from 'vuex';
+import { mapGetters } from 'vuex'
 
 
 export default {
   name: 'ContainedPlaces',
-  computed: mapState([
+  computed: {
+  ...mapGetters([
+     'getTranslationByID',
+     'getTranslation',
+     'getPlaceById'
+   ]),
+  ...mapState([
   'containedPlaces', 'facilities'
-  ]),
+  ])},
   methods: {
     checkIfExists(_id){
+
         const _a = this.facilities[0].placeIds;
         const _p = _a.indexOf(_id);
         return _p !== -1;

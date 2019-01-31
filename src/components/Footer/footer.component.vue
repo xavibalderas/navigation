@@ -15,7 +15,7 @@
     </div>
 
     <div class="right-content">
-      <ContainedPlaces/>
+
 
     </div>
 

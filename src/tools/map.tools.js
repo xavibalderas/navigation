@@ -45,7 +45,6 @@ const MapTools = {
 
     //Hide all the layers that are not needed
     var _layers = map.getStyle().layers;
-    console.log(_layers);
 
     _layers.forEach((_l)=>{
       if (!_l.id.includes('mapwize') && _l.id!=='background' && _l.id!=='position'){
@@ -102,6 +101,8 @@ const MapTools = {
     });
     mapwizeMap.setBearing(this._poi.bearing);
     mapwizeMap.setFloor(this._poi.floor);
+    mapwizeMap.centerOnUser();
+
     //mapwizeMap.refresh();
     //Change the style of the layers
     this._changeMapStyle(mapwizeMap);
@@ -140,18 +141,17 @@ const MapTools = {
           }
       });
 
-      map.on('click', function(e) {
-        console.log(e);
-        //var _layers = map.getSource('mapwize_places_symbol');
-        //console.log(_layers);
-        // _layers = map.hasImage('5c51ca7350c2e200168b8648');
-        //console.log(_layers);
-
-      });
-
-      map.on('dragend', function(event){
-        console.log(map.getBounds());
-      });
+      // map.on('click', function(e) {
+      //   //var _layers = map.getSource('mapwize_places_symbol');
+      //   //console.log(_layers);
+      //   // _layers = map.hasImage('5c51ca7350c2e200168b8648');
+      //   //console.log(_layers);
+      //
+      // });
+      //
+      // map.on('dragend', function(event){
+      //   console.log(map.getBounds());
+      // });
 
    },
 
@@ -258,9 +258,9 @@ const MapTools = {
 
     Mapwize.Api.getDirection({
         from: {
-          latitude: 47.42209953906886,
-          longitude: 8.375177110719962,
-          floor: 1
+          latitude : this._poi.latitude,
+          longitude: this._poi.longitude,
+          floor: this._poi.floor
         },
         to: {
           placeId: selectedPlace._id
