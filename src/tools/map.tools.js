@@ -132,13 +132,15 @@ const MapTools = {
   _highlightPlace: function (){
     const selectedPlace = store.state.selectedPlace;
     const previousPlace = store.state.previousPlace;
+    const floor = this.map.getFloor();
+    const placeFloor = selectedPlace.floor;
     if (previousPlace === selectedPlace) return;
     const marker = this.marker; //store.state.marker;
     const _removeMarker = marker.floor !== undefined;
     const _removePrevious = previousPlace._id !== undefined;
     _removePrevious ? this._removeSelectedPlace(previousPlace) : null;
     _removeMarker ? this.map.removeMarker(this.marker) : null;
-
+    if (placeFloor!==floor) this.map.setFloor(placeFloor);
     this.map.setPlaceStyle(selectedPlace, this._highLightStyle);
     //this._showDirections();
     this._displayMarker();
