@@ -112,7 +112,6 @@ const MapTools = {
             });
 
      map.on('mapwize:click', e => {
-        console.log(e);
           if (e.place !== null){
             store.commit({
               type: 'changePlace',
@@ -122,11 +121,11 @@ const MapTools = {
       });
 
       map.on('click', function(e) {
-        //console.log(e);
-        var _layers = map.getSource('mapwize_places_symbol');
-        console.log(_layers);
-         _layers = map.hasImage('5c51ca7350c2e200168b8648');
-        console.log(_layers);
+        console.log(e);
+        //var _layers = map.getSource('mapwize_places_symbol');
+        //console.log(_layers);
+        // _layers = map.hasImage('5c51ca7350c2e200168b8648');
+        //console.log(_layers);
 
       });
 
