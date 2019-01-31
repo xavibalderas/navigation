@@ -20,7 +20,13 @@ export default new Router({
           type: 'setlanguage',
           l: lang
         });
-
+        store.commit({
+          type: 'setPoiOptions',
+          bearing: parseFloat(to.query.bearing),
+          lat: parseFloat(to.query.lat),
+          lng: parseFloat(to.query.lng),
+          floor: parseInt(to.query.floor)
+        });
         if (i18n.locale !== lang) {
           i18n.locale = lang;
         }

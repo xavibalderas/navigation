@@ -26,15 +26,5 @@ export default {
     Footer,
     Youarehere
   },
-  mounted: function () {
-    this.$store.commit({
-      type: 'setPoiOptions',
-      language: this.lang,
-      bearing: parseFloat(this.$route.query.bearing),
-      lat: parseFloat(this.$route.query.lat),
-      lng: parseFloat(this.$route.query.lng),
-      floor: parseInt(this.$route.query.floor)
-    });
-  }
 }
 </script>

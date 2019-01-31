@@ -1,4 +1,4 @@
-var Mapwize = require('mapwize');
+//var Mapwize = require('mapwize');
 import store from '../store'
 import {
   getBoundingBox, insideBoundingBox
@@ -19,6 +19,26 @@ const MapTools = {
   },
 
   _selectedPlace: undefined,
+
+  initMap: function (optionsMapBox, optionsMapwize, config){
+    Mapwize.apiKey('3d2dafbf53a14c95cee47c2348f9c5c3');
+    const mapwizeMap = new Mapwize.Map({
+      ...optionsMapBox,
+      ...MapTools.initConfig},
+      {...optionsMapwize,
+        ...MapTools.mapConfig});
+
+      mapwizeMap.on('mapwize:ready', () => {
+        console.log(config);
+          this.init(mapwizeMap, config);
+          this.initInfo(mapwizeMap);
+          this.addControls();
+      });
+      mapwizeMap.on('mapwize:loaderror', err => {
+        // Something bad happened during Mapwize loading
+        console.error(err);
+      });
+  },
 
   _changeMapStyle : function(map){
 
