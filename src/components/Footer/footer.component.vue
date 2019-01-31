@@ -2,7 +2,7 @@
 <div id="footer">
   <div class="content">
     <div class="left-content">
-      <h2>{{getTranslation(this.selectedPlace._id, 'title')}}</h2>
+      <h2>{{getTranslationByID(this.selectedPlace._id, 'title')}}</h2>
       <template v-if="this.selectedPlace.data !== undefined">
         <template v-if="this.selectedPlace.data[language] !== undefined" >
                 <ul>
@@ -35,7 +35,7 @@ export default {
   },
   computed:{
   ...mapGetters([
-     'getTranslation',
+     'getTranslationByID',
    ]),
    ...mapState([
    'selectedPlace', 'language'

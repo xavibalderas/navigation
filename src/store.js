@@ -86,7 +86,11 @@ export default new Vuex.Store({
       const _p = state.places.find(pl => pl._id===id);
       return _p;
     },
-    getTranslation: (state, getters) => (placeId, propName) => {
+    getTranslation: (state) => (feature, propName) => {
+      const _t = feature.translations.find(_tr => _tr.language === state.language );
+      return _t[propName]
+    },
+    getTranslationByID: (state, getters) => (placeId, propName) => {
       const _p = getters.getPlaceById(placeId)
       if (_p === undefined) return;
       if (_p.translations === undefined) return;

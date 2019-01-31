@@ -5,10 +5,10 @@
     <tabs :options="{ useUrlFragment: false }">
       <tab :name="$t('rooms')">
         <template v-for="(pL) in this.placeLists">
-        <h3>{{pL.name}}</h3>
+        <h3>{{getTranslation(pL, 'title')}}</h3>
           <ul>
             <template v-for="(id) in pL.placeIds">
-              <li><a <a v-on:click="selectPlace(placeById(id))">{{getTranslation(id,'title')}}</a></li>
+              <li><a <a v-on:click="selectPlace(placeById(id))">{{getTranslationByID(id,'title')}}</a></li>
               </template>
           </ul>
         </template>
@@ -18,7 +18,7 @@
       </tab>
       <tab :name="$t('facilities')">
         <template v-for="(fL) in this.facilities">
-        <h3>{{fL.name}}</h3>
+        <h3>{{getTranslation(fL, 'title')}}</h3>
           <ul>
             <template v-for="(id) in fL.placeIds">
               <li><a class="link-with-icon" v-on:click="selectPlace(placeById(id))"><img width="75px" class="facility-icon" v-bind:src=placeById(id).style.markerUrl /> - {{placeById(id).name}}</a></li>
@@ -48,6 +48,7 @@ export default {
   }, //components
   computed: {
   ...mapGetters([
+     'getTranslationByID',
      'getTranslation',
      'getPlaceById'
    ]),
