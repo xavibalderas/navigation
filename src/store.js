@@ -43,7 +43,8 @@ export default new Vuex.Store({
     bearing: 0,
     lat: 0,
     lng: 0,
-    floor: 0
+    floor: 0,
+    centeronUser: false
   },
   mutations: {
     assignPlaces (state, payload){
@@ -74,6 +75,9 @@ export default new Vuex.Store({
     },
     toggleSearch (state){
       state.showSearch = !state.showSearch;
+    },
+    centerMap (state){
+      state.centeronUser = true;
     },
     assignFacilities (state, payload) {
       state.facilities = payload.facilities;

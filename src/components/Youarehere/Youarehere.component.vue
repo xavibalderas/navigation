@@ -1,6 +1,6 @@
 <template>
-<div id="you-are-here">
-<img src="/here.png"/> {{ $t('your_are_in') }}{{getFloor()}}
+<div id="you-are-here" >
+<a v-on:click="center"><img src="/here.png"/> {{ $t('your_are_in') }}{{getFloor()}}</a>
 </div>
 </template>
 
@@ -12,6 +12,11 @@ export default {
   computed: mapGetters([
      'getFloor',
    ]),
+   methods:{
+    center: function(event){
+        this.$store.commit('centerMap');
+    }
+   }
 }
 </script>
 

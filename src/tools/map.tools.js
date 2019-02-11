@@ -133,8 +133,18 @@ const MapTools = {
       }
     });
 
+    store.subscribe((mutation, state) => {
+      if (mutation.type === "centerMap"){
+        this._centerOnUser();
+      }
+    });
+
     this._addMapEvents(mapwizeMap);
 
+  },
+
+  _centerOnUser: function(){
+    this.map.centerOnUser();
   },
 
    _addMapEvents: function(map) {
