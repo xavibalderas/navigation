@@ -49,7 +49,7 @@ export default {
     }
   },
   mounted: function () {
-          
+
 
         //Mapwize.apiKey('3d2dafbf53a14c95cee47c2348f9c5c3');
         console.log(MapTools);
@@ -62,6 +62,7 @@ export default {
           language: this.language //'en'
           }
         )
+
       //  const mapwizeMap = new Mapwize.Map({
       //  bearing: this.bearing,
       //  ...MapTools.initConfig}, {preferredLanguage: this.language, ...MapTools.mapConfig});

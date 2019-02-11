@@ -22,22 +22,30 @@ const MapTools = {
 
   initMap: function (optionsMapBox, optionsMapwize, config){
     Mapwize.apiKey('3d2dafbf53a14c95cee47c2348f9c5c3');
-    const mapwizeMap = new Mapwize.Map({
+    Mapwize.map({
       ...optionsMapBox,
       ...MapTools.initConfig},
       {...optionsMapwize,
-        ...MapTools.mapConfig});
-
-      mapwizeMap.on('mapwize:ready', () => {
-        console.log(config);
-          this.init(mapwizeMap, config);
-          this.initInfo(mapwizeMap);
+        ...MapTools.mapConfig}).then(map =>{
+          this.init(map, config);
+          this.initInfo(map);
           this.addControls();
-      });
-      mapwizeMap.on('mapwize:loaderror', err => {
-        // Something bad happened during Mapwize loading
-        console.error(err);
-      });
+
+        }).catch(err=>{console.log(err)});
+
+
+
+
+      // mapwizeMap.on('mapwize:ready', () => {
+      //   console.log(config);
+      //     this.init(mapwizeMap, config);
+      //     this.initInfo(mapwizeMap);
+      //     this.addControls();
+      // });
+      // mapwizeMap.on('mapwize:loaderror', err => {
+      //   // Something bad happened during Mapwize loading
+      //   console.error(err);
+      // });
   },
 
   _changeMapStyle : function(map){
@@ -102,6 +110,8 @@ const MapTools = {
     mapwizeMap.setBearing(this._poi.bearing);
     mapwizeMap.setFloor(this._poi.floor);
     mapwizeMap.centerOnUser();
+    mapwizeMap.touchZoomRotate.enable({ around: 'center' });
+    mapwizeMap.touchZoomRotate.disableRotation();
 
     //mapwizeMap.refresh();
     //Change the style of the layers
@@ -124,6 +134,7 @@ const MapTools = {
     });
 
     this._addMapEvents(mapwizeMap);
+
   },
 
    _addMapEvents: function(map) {
@@ -140,6 +151,16 @@ const MapTools = {
             });
           }
       });
+
+       map.on('render', function(event){
+         const floorButtons = document.getElementsByClassName('mwz-floor-button');
+         for (var i = 0; i < floorButtons.length; i++) {
+           console.log(floorButtons[i]);
+           let _title = parseInt(floorButtons[i].title);
+           floorButtons[i].textContent = store.state.floors_short[_title][store.state.language];
+
+         }
+       });
 
       // map.on('click', function(e) {
       //   //var _layers = map.getSource('mapwize_places_symbol');

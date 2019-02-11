@@ -7,8 +7,24 @@ export default new Vuex.Store({
   state: {
     map: {},
     floors: [
-      {floor: 0, name: 'EG'},
-      {floor: 1, name: 'OG'}
+      {
+        en: 'Ground Floor',
+        de: 'Erdgeschoss'
+      },
+      {
+        en: 'First Floor',
+        de: 'Obergeschoss'
+      },
+    ],
+    floors_short: [
+      {
+        en: '0',
+        de: 'EG'
+      },
+      {
+        en: '1',
+        de: 'OG'
+      },
     ],
     places: [],
     placeLists: [],
@@ -79,7 +95,6 @@ export default new Vuex.Store({
     setlanguage (state, payload){
       state.language = payload.l;
     }
-
   },
   getters: {
     getPlaceById: (state) => (id) => {
@@ -99,8 +114,9 @@ export default new Vuex.Store({
     },
     getFloor: (state) => () =>{
       const _f = state.floor;
-      const floors = ['EG', 'OG'];
-      return floors[_f];
+
+      //const floors = ['EG', 'OG'];
+      return state.floors[_f][state.language];
     }
 
   },
