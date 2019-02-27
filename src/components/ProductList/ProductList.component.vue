@@ -33,11 +33,12 @@ export default {
   methods: {
     selectProduct: function (product){
     const place = this.$store.state.places.filter(_p => _p._id === product.placeId);
-    
+
       this.$store.commit(
         {
           type: 'changePlace',
-          place: place[0]
+          place: place[0],
+          route: true
         }
       );
       this.$store.commit('toggleSearch');

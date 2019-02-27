@@ -87,13 +87,13 @@ const MapTools = {
 
     map.setPaintProperty("background", 'background-color','#ABABAB');
 
-    map.setMinZoom(20);
+    map.setMinZoom(19);
 
   },
 
   init: function(mapwizeMap, poiPosition){
     this.map = mapwizeMap; //save the map in the object, for later use.
-    console.log(poiPosition);
+
     this._poi = poiPosition;
     this.marker = {};
 
@@ -123,7 +123,9 @@ const MapTools = {
         //this.showMarker();
         this._highlightPlace();
         this._loadIncludedPlaces();
-      //  this.showDirections();
+        if (state.showRoute){
+          this._showDirections();
+        }
       }
     });
     //Once the places are loaded into the store, we can load the lists
@@ -157,7 +159,8 @@ const MapTools = {
           if (e.place !== null){
             store.commit({
               type: 'changePlace',
-              place: e.place
+              place: e.place,
+              showRoute: false
             });
           }
       });
@@ -165,7 +168,6 @@ const MapTools = {
        map.on('render', function(event){
          const floorButtons = document.getElementsByClassName('mwz-floor-button');
          for (var i = 0; i < floorButtons.length; i++) {
-           console.log(floorButtons[i]);
            let _title = parseInt(floorButtons[i].title);
            floorButtons[i].textContent = store.state.floors_short[_title][store.state.language];
 
@@ -319,8 +321,8 @@ const MapTools = {
     dragRotate: false,
     touchZoomRotate: false,
     doubleClickZoom: false,
-    maxBounds: [[8.374323,47.420685],[8.377237, 47.422580]] //[[sw_long, sw_lat],[ne_long, ne_lat]] with bearing = 0
-
+    //maxBounds: [[8.374323,47.420685],[8.377237, 47.422580]] //[[sw_long, sw_lat],[ne_long, ne_lat]] with bearing = 0
+    maxBounds: [[8.371556,47.420555],[8.380457, 47.423139]] //[[sw_long, sw_lat],[ne_long, ne_lat]] with bearing = 0
   },
 
   mapConfig: {
@@ -423,7 +425,7 @@ const MapTools = {
         venueId:  '5b8ffe23051cd90021bd526f',
         objectClass: ['placeList']
     }).then((results) => {
-      console.log(results);
+
       store.commit({
         type: 'assignPlaceLists',
         placeLists: results.hits,

@@ -26,6 +26,7 @@ export default new Vuex.Store({
         de: 'OG'
       },
     ],
+    showRoute: false,
     places: [],
     placeLists: [],
     departments: [],
@@ -69,6 +70,7 @@ export default new Vuex.Store({
     changePlace (state, payload){
       state.previousPlace = state.selectedPlace;
       state.selectedPlace = payload.place;
+      state.showRoute = payload.route;
     },
     addMarker (state, payload){
       state.marker = payload.marker;

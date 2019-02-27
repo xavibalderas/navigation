@@ -14,8 +14,7 @@ export default new Router({
       component: Home,
       props: true,
       beforeEnter (to, from, next){
-        const lang = to.params.lang
-        console.log(to);
+        const lang = to.params.lang        
         store.commit({
           type: 'setlanguage',
           l: lang

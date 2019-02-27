@@ -73,7 +73,8 @@ export default {
       })
       this.$store.commit({
         type: 'changePlace',
-        place: place
+        place: place,
+        route: true
       });
       this.$store.commit('toggleSearch');
     }

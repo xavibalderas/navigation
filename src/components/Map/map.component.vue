@@ -52,7 +52,6 @@ export default {
 
 
         //Mapwize.apiKey('3d2dafbf53a14c95cee47c2348f9c5c3');
-        console.log(MapTools);
         MapTools.initMap({bearing: this.bearing}, {preferredLanguage: this.language},
           {
           latitude: this.lat, //47.42209953906886,
